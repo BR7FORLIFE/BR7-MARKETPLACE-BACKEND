@@ -1,0 +1,51 @@
+name: 01-webflux-compose
+
+services:
+### Nginx
+  nginx: 
+    container_name: "nginx"
+    image: nginx:trixie
+    ports:
+      - "8081:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on: 
+      - backend
+    networks:
+      - backend-net
+
+### base de datos
+  postgres:
+    image: postgres:17
+    container_name: marketplace-db
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ### backend de spring
+  backend:
+    build: .
+    container_name: webflux-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env.local
+    networks:
+      - backend-net
+
+volumes:
+  pgdata:
+
+networks:
+  backend-net:

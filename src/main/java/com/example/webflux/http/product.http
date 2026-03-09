@@ -1,0 +1,13 @@
+### register product
+
+POST http://localhost:8080/api/products/register HTTP/1.1
+Content-Type: application/json
+Authorization:"access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJCUjdGT1JMSUZFLmNvbSIsInN1YiI6Ik1hcmN1cyBIYXJyaXMiLCJST0xTIjpbeyJyb2xlIjoiUk9MRV9VU0VSIn1dLCJleHAiOjE3Njk1OTI5NTcsImlhdCI6MTc2OTM3Njk1NywianRpIjoiNTE2ZWY1NDAtNzE1ZC00ODQ0LWJkMjMtYzAwYjcwYTk1YmQ2In0.A52fXk8IwtHR6orekk1nJIYQGxn5vi25x5FgFZPf6Md1Xt-Q52adPIjcFItewv1KmfP4eOWSiCTSIol_cnsxI8zej8XjIUyl3SZUVsAOrzggqyFt5QBzDyB0RpF27yn-np9OBaOVtdIPiWhY5tUQ5_aEJ0Qd4G95QXHgHqtSgjUM0KkqoBVMuxTgYVC4KLx7k-5lQZ2KNIoy-ngY-mCKTEQaaHdySJsv7UAFpQ64V410SMVH27kJ5mAqvdKEgr96fE6YrSVBMuEONZPHKWbZbdJNSzoIsmXOmVJcZyl_A3slmB8MPWPPt1YqaTod8WsTbL21HbxeIzTCCAINVzG-LQ" 
+
+{
+    "name": "iphone 14",
+    "sku": "456789",
+    "shortDescription": "Telefono iphone 14 pro max",
+    "longDescription": null,
+    "model": "14"
+}

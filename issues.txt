@@ -1,0 +1,24 @@
+1. [x] Arreglar el hecho de que un usuario puede tener multiples refresh_token y la unica forma de invalidarlo es hacerlo manualmente.
+
+2. [x] Crear indices en la DB para robustez e integridad a la hora de hacer estos procesos
+
+3. [x] listing debe tener una Fk a usuarios debido a que es la tabla de la verdad de quien es el producto que ha registrado
+
+4. [] debe existir un catalogo del sistema y uno del vendedor
+
+5. [x] inventorys debe tener una FK a listings para ver cuanto stock posee el vendedor mas no al producto individual
+
+
+
+
+To Do: 
+
+1. [x] el usuario para poder subir a publicación de un producto (listing) debe hacerse de manera concurrida
+ejemplo: el usuario quiere vender un producto. Este crea un listing o una peticion de publicación, en consecuencia la transaccion debe estar vinculada a un estado ya sea de revision o de rechazo, en caso de que todo este bien, aceptarla y se registra el producto y se publica.
+
+
+Autenticacion: 
+
+- [] Asignar los roles correctamente para los distintos usuarios del sistema
+- [] Cargar los roles en los access_token del sistema
+- [] Por medio de los roles cargar sus permisos correspondientes

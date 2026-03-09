@@ -1,0 +1,32 @@
+spring:
+  webflux:
+    base-path: /api
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    deserialization:
+      fail-on-unknown-properties: true
+
+  profiles:
+    active:
+    - ${SPRING_PROFILE_ACTIVE}
+
+  application:
+    name: 01-WebFlux
+  
+logging:
+  level:
+    '[org.springframework]': off
+    '[io.r2dbc.postgresql]': off
+  file:
+    name: logger.log
+    
+
+server:
+  port: 8080
+
+refresh-token:
+  ttl: 30d 
+
+email-expiration:
+  time: 15m

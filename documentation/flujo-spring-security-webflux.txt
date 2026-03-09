@@ -1,0 +1,138 @@
+Spring Security Web Flux
+
+HTTP Request  
+→ Netty  
+→ ServerWebExchange  
+→ SecurityWebFilterChain (WebFilters reactivos)  
+→ AuthenticationWebFilter (tu filtro JWT)  
+    → ServerAuthenticationConverter (lee la cookie, saca el JWT)  
+    → ReactiveAuthenticationManager (valida el JWT)  
+    → SecurityContextRepository (usa Reactor Context, no sesión)  
+→ Authorization  
+→ Handler / Controller  
+→ Mono<Response>  
+→ Netty  
+→ FIN
+
+Insfraestructure/Application/Domain
+
+Client → Netty
+Netty → WebFilterChain
+WebFilterChain → AuthenticationWebFilter
+AuthenticationWebFilter → Converter
+Converter → AuthManager
+AuthManager → SecurityContext
+WebFilterChain → Handler
+Handler → UseCase
+UseCase → Repository
+Repository → DB
+← Response
+
+
+String Security MVC
+
+HTTP Request  
+→ Tomcat crea un hilo  
+→ SecurityFilterChain (Servlet Filters)  
+→ UsernamePasswordAuthenticationFilter  
+→ AuthenticationManager  
+→ AuthenticationProvider  
+→ UserDetailsService  
+→ SecurityContextHolder (ThreadLocal)  
+→ Controller  
+→ Response  
+→ FIN
+
+### flujo de seguridad
+
+1. Cliente hace la peticion -> GET /api/user; Cookie: access_token=<TOKEN>
+2. La request llega a Netty y Webflux la transforma en: 
+    → ServerWebExchange
+        → ServerHttpRequest
+        → ServerHttpResponse
+
+3. SecurityWebFilterChain intercepta la request
+@Bean
+ public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, AuthenticationWebFilte jwtAuthFilter)
+
+Spring construye la cadena de filtros reactivos, No servlet Filters
+
+en un pipeline: 
+
+    WebFilters:
+   - CORS
+   - CSRF
+   - AuthenticationWebFilter (tu JWT)
+   - Authorization
+   - Exception handlers
+
+4. Authentication Web Filter (Equivalente a OncePerRequestFilter) -> equivalente a UsernamePasswordAuthenticationFilter / OncePerRequestFilter
+
+ su trabajo: 
+    → Extraer algo de la request -> Converter
+    → Pasarlo al Manager -> validar
+    → Generar Authentication -> ponerlo en SecurityContext reactivo 
+
+5. ServerAuthenticationConverter -> Extrae el jwt de la cookie
+    exchange -> {
+    var cookie = exchange.getRequest()
+                         .getCookies()
+                         .getFirst("access_token");
+
+    return cookie != null  
+        ? Mono.just(new UsernamePasswordAuthenticationToken(cookie.getValue(), cookie.getValue()))
+        : Mono.empty();
+    }
+
+✔ Extrae el token
+✔ Lo envuelve en una Authentication “no autenticada”
+✔ No valida nada
+✔ Devuelve Mono<Authentication>
+
+6. ReactiveAuthenticationManager -> Valida el JWT
+    Se valida: 
+        → firma
+        → expiracion
+        → claims
+        → roles
+
+public Mono<Authentication> authenticate(Authentication auth) {
+
+    String token = auth.getCredentials().toString();
+
+    return jwtService.validate(token)   // Mono<Claims>
+        .map(claims -> 
+            new UsernamePasswordAuthenticationToken(
+                claims.getSubject(),
+                null,
+                rolesToAuthorities(claims)
+            )
+        );
+}
+
+7. SecurityContextRepository -> Guardar o no el SecurityContextHolder
+    NoOpServerSecurityContextRepository.getInstance() 
+        -> no guarda el securityContext en nada
+        -> No hay HttpSession
+        -> no hay persistencia entre las request
+        -> cada request debe venir con su JWT
+        Stateless real
+
+8. Authorization -> Se aplica reglas de acceso
+
+    authorizeExchange(auth -> auth
+        .pathMatchers(PUBLIC_PATHS).permitAll()
+        .anyExchange().authenticated())
+
+9. El controller recibe la request  + Auth ya validada
+
+    Mono<Authentication> auth = ReactiveSecurityContextHolder.getContext()
+    .map(SecurityContext::getAuthentication);
+
+    o:
+
+    @AuthenticationPrincipal Mono<UserDetails> user
+
+10. Respuesta -> Mono / flux -> Netty
+
+  
