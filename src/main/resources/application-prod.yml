@@ -1,0 +1,26 @@
+app:
+  email-url: ${HOST_BACKEND}
+
+spring: 
+  r2dbc:
+    url: ${DB_R2DBC_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  flyway:
+    enabled: true
+    url: ${DB_JDBC_URL} 
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    locations:
+    - classpath:db/migrations
+    baseline-on-migrate: true
+
+  cloudinary: 
+    cloud-name: ${CLOUDINARY_CLOUD_NAME}
+    api-key: ${CLOUDINARY_API_KEY}
+    api-secret: ${CLOUDINARY_API_SECRET}
+
+  resend: 
+    issuer: ${RESEND_ISSUER}
+    api-key: ${RESEND_API_KEY}
