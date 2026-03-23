@@ -1,5 +1,7 @@
 package com.example.webflux.infrastructure.zGlobalExceptionInfraestructure.web;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,4 +28,13 @@ public class HttpGlobalAdviceExceptions {
         }
         return StaticError.buildError(HttpStatus.UNPROCESSABLE_ENTITY, "Invalid data!", exchange);
     }
+    //!DESARROLLO NO DEJARLO EN PRODUCCION XD
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handle(Exception ex) {
+        return ResponseEntity.status(500).body(
+                Map.of(
+                        "error", ex.getClass().getSimpleName(),
+                        "message", ex.getMessage()));
+    }
+
 }

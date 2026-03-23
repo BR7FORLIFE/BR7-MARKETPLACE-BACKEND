@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ServerWebExchange;
 
 import com.example.webflux.application.auth.exceptions.IncorrectPasswordException;
+import com.example.webflux.application.auth.exceptions.JwtExpirationException;
+import com.example.webflux.application.auth.exceptions.JwtInvalidSignature;
 import com.example.webflux.application.auth.exceptions.UserAlreadyRegisterException;
+import com.example.webflux.application.auth.exceptions.UserNotAuthenticate;
 import com.example.webflux.application.auth.exceptions.UserNotFoundException;
 import com.example.webflux.application.refreshToken.exceptions.ValidateAndRotateException;
 import com.example.webflux.domain.refreshToken.exceptions.RefreshTokenExpiredException;
@@ -73,5 +76,26 @@ public class AuthGlobalAdviceExceptions {
             JOSEException ex,
             ServerWebExchange exchange) {
         return StaticError.buildError(HttpStatus.FORBIDDEN, ex.getMessage(), exchange);
+    }
+
+    @ExceptionHandler(UserNotAuthenticate.class)
+    public ResponseEntity<ApiError> handleUserNotAuthenticate(
+            UserNotAuthenticate ex,
+            ServerWebExchange exchange) {
+        return StaticError.buildError(HttpStatus.FORBIDDEN, ex.getMessage(), exchange);
+    }
+
+    @ExceptionHandler(JwtInvalidSignature.class)
+    public ResponseEntity<ApiError> handleInvalidJwtSignature(
+            JwtInvalidSignature ex,
+            ServerWebExchange exchange) {
+        return StaticError.buildError(HttpStatus.UNAUTHORIZED, ex.getMessage(), exchange);
+    }
+
+    @ExceptionHandler(JwtExpirationException.class)
+    public ResponseEntity<ApiError> handleJwtExpiredException(
+            JwtExpirationException ex,
+            ServerWebExchange exchange) {
+        return StaticError.buildError(HttpStatus.UNAUTHORIZED, ex.getMessage(), exchange);
     }
 }
