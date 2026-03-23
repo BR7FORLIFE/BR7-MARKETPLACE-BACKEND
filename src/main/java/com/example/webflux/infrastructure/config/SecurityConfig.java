@@ -2,6 +2,7 @@ package com.example.webflux.infrastructure.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -34,6 +35,11 @@ public class SecurityConfig {
             throws Exception {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint((exchange, ex) -> {
+                            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                            return exchange.getResponse().setComplete();
+                        }))
                 .authorizeExchange(
                         exchange -> exchange.pathMatchers(PUBLIC_PATHS).permitAll().anyExchange().authenticated())
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
