@@ -7,10 +7,15 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.example.webflux.application.Authorization.ports.RolUserRepositoryPort;
+import com.example.webflux.application.auth.exceptions.UserNotFoundException;
+import com.example.webflux.application.auth.model.AuthenticatedUser;
+import com.example.webflux.application.auth.ports.UserDomainRepositoryPort;
+import com.example.webflux.application.auth.ports.UserJwtPort;
 import com.example.webflux.application.refreshToken.exceptions.ValidateAndRotateException;
+import com.example.webflux.application.refreshToken.ports.RefreshTokenDomainRepositoryPort;
 import com.example.webflux.application.refreshToken.usecases.RefreshTokenUseCase;
 import com.example.webflux.domain.refreshToken.models.RefreshTokenModel;
-import com.example.webflux.domain.refreshToken.ports.RefreshTokenDomainRepositoryPort;
 import com.example.webflux.domain.refreshToken.services.RefreshTokenDomainService;
 import com.example.webflux.infrastructure.config.HashService;
 
@@ -23,13 +28,21 @@ public class RefreshTokenUseCaseImp implements RefreshTokenUseCase {
 
     private final HashService hashConfig;
     private final RefreshTokenDomainRepositoryPort repository; // <-- puerto del dominio de la feature RefreshToken
+    private final UserDomainRepositoryPort userPort; // pierto para comunicarse con el repositorio de usuarios
+    private final UserJwtPort userJwtPort; // puerto para comunicarse con los adaptadores de JWT
+    private final RolUserRepositoryPort rolUserRepositoryPort; // puerto para encontrar los roles vinculados a un
+                                                               // usuario
     private final Duration ttlDuration; // <-- representa una cantidad de tiempo ej: 5 Min, 30 Days, 90 seconds
 
     public RefreshTokenUseCaseImp(HashService hashConfig, RefreshTokenDomainRepositoryPort repo,
+            UserDomainRepositoryPort userPort, UserJwtPort userJwtPort, RolUserRepositoryPort rolUserRepositoryPort,
             @Value("${refresh-token.ttl}") Duration duration) {
         this.hashConfig = hashConfig;
         this.repository = repo;
+        this.userPort = userPort;
         this.ttlDuration = duration;
+        this.userJwtPort = userJwtPort;
+        this.rolUserRepositoryPort = rolUserRepositoryPort;
     }
 
     // creamos el refreshToken
@@ -74,4 +87,35 @@ public class RefreshTokenUseCaseImp implements RefreshTokenUseCase {
         return repository.findByTokenHash(hash)
                 .flatMap(rt -> repository.save(rt.revoke())).then();
     }
+
+    public Mono<String> validateAndGenerateAccessToken(String refreshToken) {
+        String hash = hashConfig.sha256(refreshToken);
+
+        return repository.findByTokenHash(hash)
+                .switchIfEmpty(Mono.error(new ValidateAndRotateException()))
+                .flatMap(refreshModel -> {
+                    // llamamos al dominio para validar que el refresh sea valido!
+                    Instant now = Instant.now();
+                    RefreshTokenDomainService.validateToken(refreshModel, now);
+
+                    UUID userId = refreshModel.getUserId();
+
+                    return userPort.findByUserId(userId)
+                            .switchIfEmpty(Mono.error(new UserNotFoundException()))
+                            .flatMap(user -> rolUserRepositoryPort.obtainRolByUserId(user.getId())
+                                    .collectList()
+                                    .flatMap(rols -> {
+                                        AuthenticatedUser authenticatedUser = new AuthenticatedUser(
+                                                user.getId(),
+                                                user.getUsername(),
+                                                user.getEmail(),
+                                                user.getPassword(),
+                                                user.getAuthStatus().name(),
+                                                rols);
+
+                                        return userJwtPort.generateAccessToken(authenticatedUser);
+                                    }));
+                });
+    }
+
 }

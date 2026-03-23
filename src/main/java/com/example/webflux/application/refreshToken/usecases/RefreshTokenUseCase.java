@@ -10,4 +10,6 @@ public interface RefreshTokenUseCase {
     Mono<String> validateAndRotate(String rawToken);
 
     Mono<Void> revoke(String rawToken);
+
+    Mono<String> validateAndGenerateAccessToken(String refresh_token);
 }
