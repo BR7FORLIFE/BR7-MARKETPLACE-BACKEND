@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
+import com.example.webflux.application.auth.ports.UserDomainRepositoryPort;
 import com.example.webflux.domain.auth.models.UserModelDomain;
-import com.example.webflux.domain.auth.ports.UserDomainRepositoryPort;
 import com.example.webflux.infrastructure.auth.mapper.UserMapper;
 import com.example.webflux.infrastructure.auth.persistence.UserModelEntity;
 import com.example.webflux.infrastructure.auth.repository.postgres.R2dbcPostgresUserRepository;

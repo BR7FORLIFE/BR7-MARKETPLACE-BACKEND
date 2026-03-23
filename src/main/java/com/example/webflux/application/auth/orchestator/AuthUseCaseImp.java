@@ -17,6 +17,7 @@ import com.example.webflux.application.auth.exceptions.IncorrectPasswordExceptio
 import com.example.webflux.application.auth.exceptions.UserAlreadyRegisterException;
 import com.example.webflux.application.auth.exceptions.UserNotFoundException;
 import com.example.webflux.application.auth.exceptions.VerifiedUserException;
+import com.example.webflux.application.auth.ports.UserDomainRepositoryPort;
 import com.example.webflux.application.auth.ports.UserJwtPort;
 import com.example.webflux.application.auth.ports.UserSecurityPort;
 import com.example.webflux.application.auth.usecases.AuthUseCase;
@@ -25,7 +26,6 @@ import com.example.webflux.application.emailVerificationToken.usecases.EmailVeri
 import com.example.webflux.application.refreshToken.usecases.RefreshTokenUseCase;
 import com.example.webflux.domain.auth.models.UserAuthStatus;
 import com.example.webflux.domain.auth.models.UserModelDomain;
-import com.example.webflux.domain.auth.ports.UserDomainRepositoryPort;
 
 import reactor.core.publisher.Mono;
 

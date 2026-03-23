@@ -6,10 +6,10 @@ import com.example.webflux.application.Authorization.command.AssigmentUserRolCom
 import com.example.webflux.application.Authorization.command.AssigmentUserRolCommandResult;
 import com.example.webflux.application.Authorization.exceptions.AssigmentRolUserException;
 import com.example.webflux.application.Authorization.exceptions.RolNotFoundException;
+import com.example.webflux.application.Authorization.ports.RolPort;
+import com.example.webflux.application.Authorization.ports.RolUserRepositoryPort;
 import com.example.webflux.application.Authorization.usecases.AuthorizationRolUseCase;
 import com.example.webflux.domain.Authorization.models.rols.RolsUsersDomain;
-import com.example.webflux.domain.Authorization.ports.rols.RolPort;
-import com.example.webflux.domain.Authorization.ports.rols.RolUserRepositoryPort;
 
 import reactor.core.publisher.Mono;
 

@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
+import com.example.webflux.application.refreshToken.ports.RefreshTokenDomainRepositoryPort;
 import com.example.webflux.domain.refreshToken.models.RefreshTokenModel;
-import com.example.webflux.domain.refreshToken.ports.RefreshTokenDomainRepositoryPort;
 import com.example.webflux.infrastructure.refreshToken.mapper.RefreshTokenMapper;
 import com.example.webflux.infrastructure.refreshToken.persistence.RefreshTokenEntity;
 import com.example.webflux.infrastructure.refreshToken.repository.postgres.R2dbcPostgresRefreshTokenRepository;

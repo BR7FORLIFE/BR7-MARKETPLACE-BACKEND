@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.cloudinary.Cloudinary;
-import com.example.webflux.domain.AssetsMedia.ports.MediaStoragePort;
+import com.example.webflux.application.AssetsMedia.ports.MediaStoragePort;
 
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;

@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
+import com.example.webflux.application.emailVerificationToken.ports.EmailVerificationTokenPort;
 import com.example.webflux.domain.emailVerificationToken.models.EmailVerificationTokenModel;
-import com.example.webflux.domain.emailVerificationToken.ports.EmailVerificationTokenPort;
 import com.example.webflux.infrastructure.emailVerificationToken.mapper.EmailVerificationTokenMapper;
 import com.example.webflux.infrastructure.emailVerificationToken.persistence.EmailVerificationTokenEntity;
 import com.example.webflux.infrastructure.emailVerificationToken.repository.postgres.R2dbcPostgresEmailVerificationTokenRepository;

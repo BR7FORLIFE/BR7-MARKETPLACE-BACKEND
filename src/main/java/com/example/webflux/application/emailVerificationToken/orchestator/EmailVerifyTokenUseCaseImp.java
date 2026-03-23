@@ -7,18 +7,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.example.webflux.application.auth.exceptions.UserNotFoundException;
+import com.example.webflux.application.auth.ports.UserDomainRepositoryPort;
 import com.example.webflux.application.emailVerificationToken.commands.SendEmailCommand;
 import com.example.webflux.application.emailVerificationToken.commands.SendEmailCommandResult;
 import com.example.webflux.application.emailVerificationToken.commands.VerifyEmailCommand;
 import com.example.webflux.application.emailVerificationToken.commands.VerifyEmailCommandResult;
 import com.example.webflux.application.emailVerificationToken.exceptions.InvalidTokenException;
 import com.example.webflux.application.emailVerificationToken.model.SendEmailParams;
+import com.example.webflux.application.emailVerificationToken.ports.EmailVerificationTokenPort;
 import com.example.webflux.application.emailVerificationToken.ports.SendEmailPort;
 import com.example.webflux.application.emailVerificationToken.usecases.EmailVerifiedTokenUseCase;
 import com.example.webflux.domain.auth.models.UserModelDomain;
-import com.example.webflux.domain.auth.ports.UserDomainRepositoryPort;
 import com.example.webflux.domain.emailVerificationToken.models.EmailVerificationTokenModel;
-import com.example.webflux.domain.emailVerificationToken.ports.EmailVerificationTokenPort;
 import com.example.webflux.infrastructure.config.HashService;
 
 import reactor.core.publisher.Mono;

@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
+import com.example.webflux.application.Authorization.ports.RolPort;
 import com.example.webflux.domain.Authorization.models.rols.RolModelDomain;
-import com.example.webflux.domain.Authorization.ports.rols.RolPort;
 import com.example.webflux.infrastructure.Autorization.mapper.RolMapper;
 import com.example.webflux.infrastructure.Autorization.repository.postgres.R2dbcPostgresRolRepository;
 
