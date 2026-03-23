@@ -11,7 +11,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.nimbusds.jose.JOSEException;
+import com.example.webflux.application.auth.exceptions.JwtExpirationException;
+import com.example.webflux.application.auth.exceptions.JwtInvalidSignature;
+import com.example.webflux.infrastructure.security.CustomUserDetails;
 import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
@@ -47,22 +49,24 @@ public class JwtService {
             Date currentDate = Date.from(timestampCurrent);
             Date expirationDate = Date.from(timestampFuture);
 
+            CustomUserDetails details = (CustomUserDetails) userDetails;
             /**
              * Caracteristicas de Nimbus JOSE
              * 
              * - Crea el JWT por sus 3 piezas fundamentales (Header, Payload, Signature)
              */
-
             // Payload del token -> Nimbus JOSE
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                     .issuer(this.issuer)
-                    .subject(userDetails.getUsername())
-                    .issueTime(currentDate)
-                    .expirationTime(expirationDate)
-                    .claim("ROLS", userDetails.getAuthorities()
+                    .subject(details.getUsername())
+                    .claim("userId", details.getUserId())
+                    .claim("ROLS", details.getAuthorities()
                             .stream()
                             .map(GrantedAuthority::getAuthority)
                             .toList())
+                    .claim("authStatus", details.getAuthStatus().toString())
+                    .issueTime(currentDate)
+                    .expirationTime(expirationDate)
                     .jwtID(UUID.randomUUID().toString())
                     .build();
 
@@ -105,7 +109,7 @@ public class JwtService {
 
             // validamos si conserva su integridad
             if (!signedJWT.verify(jwsVerifier)) {
-                throw new JOSEException("invalid signature");
+                throw new JwtInvalidSignature();
             }
 
             // obtenemos las claims
@@ -115,7 +119,7 @@ public class JwtService {
             Date date = new Date();
 
             if (claims.getExpirationTime() == null || date.after(claims.getExpirationTime())) {
-                throw new Exception("Token expired!");
+                throw new JwtExpirationException();
             }
 
             return claims;
