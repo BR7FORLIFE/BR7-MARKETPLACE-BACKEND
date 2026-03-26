@@ -71,7 +71,7 @@ public class ListingController {
     @PostMapping
     public Mono<ResponseEntity<CreateListingResponseDto>> createListing(
             @RequestBody @Valid CreateListingRequestDto dto, Authentication authentication) {
-        CustomUserDetails details = (CustomUserDetails) authentication.getDetails();
+        CustomUserDetails details = (CustomUserDetails) authentication.getPrincipal();
 
         UUID userId = details.getUserId();
 
@@ -81,37 +81,34 @@ public class ListingController {
         CreateListingCommand cmd = new CreateListingCommand(userId, product, dto.price(), dto.currency());
 
         return listingUseCase.createListing(cmd)
-                .map(result -> ResponseEntity.status(HttpStatus.CREATED).body(new CreateListingResponseDto()));
+                .map(result -> ResponseEntity.status(HttpStatus.CREATED)
+                        .body(new CreateListingResponseDto(result.listingId(), result.status(), result.message())));
     }
 
-    @PreAuthorize("") // <-- solo los moderadores o administradores pueden aprobar un listing
+    // @PreAuthorize("hasRole('ADMIN')") // <-- solo los moderadores o
+    // administradores pueden aprobar un listing
     @PostMapping("/approve")
     public Mono<ResponseEntity<ApproveListingResponseDto>> approveListing(
             @RequestBody @Valid ApproveListingRequestDto dto) {
-
         ApproveListingCommand cmd = new ApproveListingCommand(dto.listingId());
 
         return listingUseCase.approveListing(cmd)
-                .map(result -> ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApproveListingResponseDto()))
-                .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).build()));
-
+                .map(result -> ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApproveListingResponseDto(
+                        result.listingId(), result.reviewStatus(), result.publicationStatus())));
     }
 
-    @PreAuthorize("")
     @PostMapping("/publish")
     public Mono<ResponseEntity<PublishListingResponseDto>> publishListing(
             @RequestBody @Valid PublishListingRequestDto dto) {
         return null;
     }
 
-    @PreAuthorize("")
     @PostMapping("/rejected")
     public Mono<ResponseEntity<RejectedListingResponseDto>> rejectedListing(
             @RequestBody @Valid RejectedListingRequestDto dto) {
         return null;
     }
 
-    @PreAuthorize("")
     @PostMapping("/suspend")
     public Mono<ResponseEntity<SuspendListingResponseDto>> rejectedListing(
             @RequestBody @Valid SuspendListingRequestDto dto) {
