@@ -45,12 +45,14 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
                     List<String> rols = (List<String>) claims.getClaim("ROLS");
                     List<GrantedAuthority> authorities = rols == null
                             ? List.of()
-                            : rols.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+                            : rols.stream()
+                                    .map(role -> new SimpleGrantedAuthority(role.toString()))
+                                    .collect(Collectors.toList());
 
                     CustomUserDetails userDetails = new CustomUserDetails(
                             UserModelDomain.createNew(UUID.fromString(userId), username, authStatus, null, null),
                             authorities);
-
+                        
                     Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
                     return Mono.just(auth);
                 })
