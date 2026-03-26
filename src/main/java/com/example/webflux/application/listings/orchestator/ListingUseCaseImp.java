@@ -13,89 +13,64 @@ import com.example.webflux.application.listings.command.RejectedListingCommandRe
 import com.example.webflux.application.listings.command.SuspendListingCommand;
 import com.example.webflux.application.listings.command.SuspendListingCommandResult;
 import com.example.webflux.application.listings.exceptions.ApproveListingException;
-import com.example.webflux.application.listings.exceptions.CreateListingException;
 import com.example.webflux.application.listings.exceptions.PublishListingException;
 import com.example.webflux.application.listings.exceptions.SuspendListingException;
 import com.example.webflux.application.listings.usecases.ListingUseCase;
+import com.example.webflux.application.products.commands.RegisterProductCommand;
+import com.example.webflux.application.products.usecases.ProductUseCases;
 import com.example.webflux.domain.listings.models.ListingModelDomain;
 import com.example.webflux.domain.listings.ports.ListingDomainRepositoryPort;
-import com.example.webflux.domain.products.models.ProductModelDomain;
-import com.example.webflux.domain.products.ports.ProductDomainRepositoryPort;
 
 import reactor.core.publisher.Mono;
 
 @Service
 public class ListingUseCaseImp implements ListingUseCase {
 
-        private final ProductDomainRepositoryPort productPort;
+        private final ProductUseCases productUseCase;
         private final ListingDomainRepositoryPort listingPort;
 
-        public ListingUseCaseImp(ProductDomainRepositoryPort productPort,
+        public ListingUseCaseImp(ProductUseCases productUseCases,
                         ListingDomainRepositoryPort listingPort) {
-                this.productPort = productPort;
+                this.productUseCase = productUseCases;
                 this.listingPort = listingPort;
         }
 
         @Override
         public Mono<CreateListingCommandResult> createListing(CreateListingCommand cmd) {
 
-                return productPort.findBySku(cmd.product().sku())
-                                .hasElement()
-                                .flatMap(exists -> {
+                RegisterProductCommand cmdProduct = new RegisterProductCommand(cmd.userId(),
+                                cmd.product().sku(), cmd.product().name(),
+                                cmd.product().shortDescription(),
+                                cmd.product().longDescription(), cmd.product().model());
 
-                                        if (exists) {
-                                                return Mono.error(
-                                                                new CreateListingException());
-                                        }
+                return productUseCase.registerProduct(cmdProduct)
+                                .flatMap(product -> {
 
-                                        return productPort.save(
-                                                        ProductModelDomain.createDraft(
-                                                                        cmd.userId(),
-                                                                        cmd.product().sku(),
-                                                                        cmd.product().name(),
-                                                                        cmd.product().shortDescription(),
-                                                                        cmd.product().longDescription(),
-                                                                        cmd.product().model()))
-                                                        .flatMap(product -> {
+                                        ListingModelDomain listing = ListingModelDomain
+                                                        .createDraft(
+                                                                        product.productId(),
+                                                                        cmd.price(),
+                                                                        cmd.currency());
 
-                                                                ListingModelDomain listing = ListingModelDomain
-                                                                                .createDraft(
-                                                                                                product.getProductId(),
-                                                                                                cmd.price(),
-                                                                                                cmd.currency());
+                                        return listingPort.save(listing);
+                                })
+                                .map(listing -> new CreateListingCommandResult(
+                                                listing.getListingId(),
+                                                listing.getReviewStatus().name(),
+                                                "Listing create succesfull!"));
 
-                                                                return listingPort.save(listing);
-                                                        })
-                                                        .map(listing -> new CreateListingCommandResult(
-                                                                        listing.getListingId(),
-                                                                        listing.getReviewStatus().name(),
-                                                                        "Listing create succesfull!"));
-                                });
         }
 
         @Override
         public Mono<ApproveListingCommandResult> approveListing(ApproveListingCommand cmd) {
                 return listingPort.findByListingId(cmd.listingId())
                                 .switchIfEmpty(Mono.error(new ApproveListingException()))
-                                .map(ListingModelDomain::approveReview)
+                                .map(ListingModelDomain::submitForReview)
                                 .flatMap(listingPort::save)
-                                .map(newListing -> new ApproveListingCommandResult())
-                                .onErrorMap(IllegalStateException.class,
-                                                e -> new IllegalStateException(
-                                                                "error to process the approve state listing!"));
-
-        }
-
-        @Override
-        public Mono<SuspendListingCommandResult> suspendListing(SuspendListingCommand cmd) {
-                return listingPort.findByListingId(cmd.listingId())
-                                .switchIfEmpty(Mono.error(new SuspendListingException()))
-                                .map(ListingModelDomain::suspend)
-                                .flatMap(listingPort::save)
-                                .map(newListing -> new SuspendListingCommandResult())
-                                .onErrorMap(IllegalStateException.class,
-                                                e -> new IllegalStateException(
-                                                                "Error to process the suspend state listing"));
+                                .map(newListing -> new ApproveListingCommandResult(
+                                                newListing.getListingId(),
+                                                String.valueOf(newListing.getReviewStatus()),
+                                                String.valueOf(newListing.getPublicationStatus())));
         }
 
         @Override
@@ -105,6 +80,19 @@ public class ListingUseCaseImp implements ListingUseCase {
                                 .map(ListingModelDomain::rejectReview)
                                 .flatMap(listingPort::save)
                                 .map(newListing -> new RejectedListingCommandResult())
+                                .onErrorMap(IllegalStateException.class,
+                                                e -> new IllegalStateException(
+                                                                "Error to process the suspend state listing"));
+        }
+
+        // metodos de publicacion de listings (suspender)
+        @Override
+        public Mono<SuspendListingCommandResult> suspendListing(SuspendListingCommand cmd) {
+                return listingPort.findByListingId(cmd.listingId())
+                                .switchIfEmpty(Mono.error(new SuspendListingException()))
+                                .map(ListingModelDomain::suspend)
+                                .flatMap(listingPort::save)
+                                .map(newListing -> new SuspendListingCommandResult())
                                 .onErrorMap(IllegalStateException.class,
                                                 e -> new IllegalStateException(
                                                                 "Error to process the suspend state listing"));
