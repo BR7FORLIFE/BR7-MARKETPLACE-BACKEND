@@ -39,23 +39,23 @@ public enum ListingStatusReview {
 
     // default
     public ListingStatusReview submit() {
-        throw invalid("");
+        throw invalid("submit");
     }
 
     public ListingStatusReview approve() {
-        throw invalid("");
+        throw invalid("approve");
     }
 
     public ListingStatusReview requestFix() {
-        throw invalid("");
+        throw invalid("request fix");
     }
 
     public ListingStatusReview reject() {
-        throw invalid("");
+        throw invalid("reject");
     }
 
     public ListingStatusReview resubmit() {
-        throw invalid("");
+        throw invalid("resubmit");
     }
 
     private RuntimeException invalid(String action) {

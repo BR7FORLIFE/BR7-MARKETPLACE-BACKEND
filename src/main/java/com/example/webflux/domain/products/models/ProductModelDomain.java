@@ -74,6 +74,10 @@ public final class ProductModelDomain {
                 model);
     }
 
+    public UUID getUserId() {
+        return userId;
+    }
+
     public UUID getProductId() {
         return productId;
     }
