@@ -18,6 +18,6 @@ public class ProductGlobalAdviceExceptions {
     public ResponseEntity<ApiError> handleProductNotFound(
             RegisterProductException ex,
             ServerWebExchange exchange) {
-        return StaticError.buildError(HttpStatus.NOT_FOUND, ex.getMessage(), exchange);
+        return StaticError.buildError(HttpStatus.NOT_ACCEPTABLE, ex.getMessage(), exchange);
     }
 }

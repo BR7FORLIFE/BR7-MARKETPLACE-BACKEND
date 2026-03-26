@@ -19,7 +19,7 @@ public class ProductMapper {
     public static ProductEntity toEntity(ProductModelDomain productModelDomain) {
         ProductEntity productEntity = new ProductEntity();
         productEntity.setId(productModelDomain.getProductId());
-        productEntity.setUserId(productModelDomain.getProductId());
+        productEntity.setUserId(productModelDomain.getUserId());
         productEntity.setSku(productModelDomain.getSku());
         productEntity.setName(productModelDomain.getName());
         productEntity.setShortDescription(productModelDomain.getShortDescription());
