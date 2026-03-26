@@ -7,6 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record CreateListingRequestDto(@Positive @NotNull Double price, @NotNull CurrencyEnum currency,
-                ProductDraft product) {
+        ProductDraft product) {
 
 }

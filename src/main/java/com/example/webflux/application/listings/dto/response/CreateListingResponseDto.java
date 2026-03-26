@@ -1,5 +1,7 @@
 package com.example.webflux.application.listings.dto.response;
 
-public record CreateListingResponseDto() {
-    
+import java.util.UUID;
+
+public record CreateListingResponseDto(UUID listingId, String status, String message) {
+
 }
