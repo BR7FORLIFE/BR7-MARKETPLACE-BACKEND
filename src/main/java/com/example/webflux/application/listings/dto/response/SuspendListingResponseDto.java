@@ -1,5 +1,7 @@
 package com.example.webflux.application.listings.dto.response;
 
-public record SuspendListingResponseDto() {
+import java.util.UUID;
+
+public record SuspendListingResponseDto(UUID listingId, String reviewStatus, String message) {
 
 }
