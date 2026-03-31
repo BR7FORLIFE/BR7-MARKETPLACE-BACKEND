@@ -1,5 +1,6 @@
 package com.example.webflux.infrastructure.listings.repository;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
@@ -10,6 +11,7 @@ import com.example.webflux.infrastructure.listings.mapper.ListingMapper;
 import com.example.webflux.infrastructure.listings.persistence.ListingEntity;
 import com.example.webflux.infrastructure.listings.repository.postgres.R2dbcPostgresListingRepository;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
@@ -42,4 +44,11 @@ public class R2dbcListingRepositoryAdapter implements ListingDomainRepositoryPor
                 .map(ListingMapper::toDomain);
     }
 
+    @Override
+    public Flux<ListingModelDomain> getAllListings(Instant createAt, UUID id, int limit,
+            String review,
+            String publicationStatus) {
+        return listingRepository.getAllListings(createAt, limit, id, review, publicationStatus)
+                .map(ListingMapper::toDomain);
+    }
 }
