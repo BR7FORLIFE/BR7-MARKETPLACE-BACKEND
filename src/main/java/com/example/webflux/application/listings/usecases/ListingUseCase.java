@@ -4,6 +4,10 @@ import com.example.webflux.application.listings.command.ApproveListingCommand;
 import com.example.webflux.application.listings.command.ApproveListingCommandResult;
 import com.example.webflux.application.listings.command.CreateListingCommand;
 import com.example.webflux.application.listings.command.CreateListingCommandResult;
+import com.example.webflux.application.listings.command.GetAllListingByCursorPaginationCommand;
+import com.example.webflux.application.listings.command.GetAllListingByCursorPaginationCommandResult;
+import com.example.webflux.application.listings.command.InReviewStatusListingCommand;
+import com.example.webflux.application.listings.command.InReviewStatusListingCommandResult;
 import com.example.webflux.application.listings.command.PublishListingCommand;
 import com.example.webflux.application.listings.command.PublishListingCommandResult;
 import com.example.webflux.application.listings.command.RejectedListingCommand;
@@ -14,9 +18,14 @@ import com.example.webflux.application.listings.command.SuspendListingCommandRes
 import reactor.core.publisher.Mono;
 
 public interface ListingUseCase {
+
+    Mono<GetAllListingByCursorPaginationCommandResult> getAllListings(GetAllListingByCursorPaginationCommand cmd);
+
     Mono<PublishListingCommandResult> publishListing(PublishListingCommand cmd);
 
     Mono<CreateListingCommandResult> createListing(CreateListingCommand cmd);
+
+    Mono<InReviewStatusListingCommandResult> inReviewListing(InReviewStatusListingCommand cmd);
 
     Mono<ApproveListingCommandResult> approveListing(ApproveListingCommand cmd);
 
