@@ -1,37 +1,15 @@
 package com.example.webflux.domain.listings.services;
 
-import com.example.webflux.domain.listings.models.ListingStatusReview;
+import java.util.List;
 
 public class ListingService {
 
-    private ListingStatusReview status;
+    /**
+     * Este servicio nos va a permitir saber si en una lista de roles
+     * contiene roles provilegiados para hacer una accion
+     */
 
-    public ListingService(ListingStatusReview status) {
-        this.status = status;
+    public static Boolean canViewAll(List<String> roles) {
+        return roles.contains("ADMIN");
     }
-
-    public void submit() {
-        this.status = status.submit();
-    }
-
-    public void approve() {
-        this.status.approve();
-    }
-
-    public void requestFix() {
-        this.status.requestFix();
-    }
-
-    public void reject() {
-        this.status.reject();
-    }
-
-    public void resubmit() {
-        this.status.resubmit();
-    }
-
-    public ListingStatusReview getStatus() {
-        return this.status;
-    }
-
 }
