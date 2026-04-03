@@ -1,5 +1,5 @@
 app:
-  email-url: ${HOST_BACKEND}
+  email-url: ${HOST_BACKEND_EMAIL_VERIFY}
 
 spring: 
   r2dbc:

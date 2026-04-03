@@ -9,15 +9,16 @@ spring:
 
   profiles:
     active:
-    - ${SPRING_PROFILE_ACTIVE}
+    - ${SPRING_PROFILES_ACTIVE}
 
   application:
     name: 01-WebFlux
   
 logging:
   level:
-    '[org.springframework]': off
-    '[io.r2dbc.postgresql]': off
+    '[org.springframework]': debug
+    '[io.r2dbc.postgresql]': debug
+    root: debug
   file:
     name: logger.log
     
