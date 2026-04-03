@@ -28,13 +28,14 @@ public class HttpGlobalAdviceExceptions {
         }
         return StaticError.buildError(HttpStatus.UNPROCESSABLE_ENTITY, "Invalid data!", exchange);
     }
-    //!DESARROLLO NO DEJARLO EN PRODUCCION XD
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handle(Exception ex) {
-        return ResponseEntity.status(500).body(
-                Map.of(
-                        "error", ex.getClass().getSimpleName(),
-                        "message", ex.getMessage()));
-    }
+
+    // // !DESARROLLO NO DEJARLO EN PRODUCCION XD
+    // @ExceptionHandler(Exception.class)
+    // public ResponseEntity<?> handle(Exception ex) {
+    //     return ResponseEntity.status(500).body(
+    //             Map.of(
+    //                     "error", ex.getClass().getSimpleName(),
+    //                     "message", ex.getMessage()));
+    // }
 
 }
