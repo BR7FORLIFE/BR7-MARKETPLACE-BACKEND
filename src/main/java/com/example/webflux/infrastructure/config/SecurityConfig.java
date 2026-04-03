@@ -19,7 +19,7 @@ import com.example.webflux.infrastructure.security.JwtReactiveAuthenticationMana
 import com.example.webflux.infrastructure.security.jwt.JwtService;
 
 @Configuration
-@EnableReactiveMethodSecurity()
+@EnableReactiveMethodSecurity
 public class SecurityConfig {
 
     private final JwtService jwtService;

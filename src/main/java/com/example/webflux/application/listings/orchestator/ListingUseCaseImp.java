@@ -66,10 +66,9 @@ public class ListingUseCaseImp implements ListingUseCase {
                         GetAllListingByCursorPaginationCommand cmd) {
 
                 return Mono.defer(() -> {
-
                         ListingCursor cursor = null;
 
-                        if (cmd.cursor() != null) {
+                        if (cmd.cursor() != null && !cmd.cursor().isBlank()) {
                                 try {
                                         cursor = base64Config.decode(cmd.cursor());
                                 } catch (Exception e) {
