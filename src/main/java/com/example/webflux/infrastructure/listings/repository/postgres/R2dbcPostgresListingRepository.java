@@ -20,17 +20,17 @@ public interface R2dbcPostgresListingRepository extends ReactiveCrudRepository<L
             FROM listings
             WHERE
                 (:statusPublication IS NULL OR status_publication = :statusPublication)
-                AND (:review IS NULL OR review = :review)
+                AND (:review IS NULL OR status_review = :review)
                 AND (
                     (:createAtCursor IS NULL OR :id IS NULL)
                     OR (
                         create_at > :createAtCursor
-                        OR (create_at = :createAtCursor AND id > :id)
+                        OR (create_at = :createAtCursor AND listing_id > :id)
                     )
                 )
-                ORDER BY create_at ASC, id ASC
+                ORDER BY create_at ASC, listing_id ASC
                 LIMIT :limit
-            """)
+                """)
     Flux<ListingEntity> getAllListings(
             @Param("createAtCursor") Instant createAtCursor,
             @Param("limit") int limit,
