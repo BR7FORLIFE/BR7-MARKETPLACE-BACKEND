@@ -1,19 +1,13 @@
 package com.example.webflux.application.listings.usecases;
 
-import com.example.webflux.application.listings.command.ApproveListingCommand;
-import com.example.webflux.application.listings.command.ApproveListingCommandResult;
+import com.example.webflux.application.listings.command.ChangeStatusListingCommand;
+import com.example.webflux.application.listings.command.ChangeStatusListingCommandResult;
 import com.example.webflux.application.listings.command.CreateListingCommand;
 import com.example.webflux.application.listings.command.CreateListingCommandResult;
 import com.example.webflux.application.listings.command.GetAllListingByCursorPaginationCommand;
 import com.example.webflux.application.listings.command.GetAllListingByCursorPaginationCommandResult;
-import com.example.webflux.application.listings.command.InReviewStatusListingCommand;
-import com.example.webflux.application.listings.command.InReviewStatusListingCommandResult;
-import com.example.webflux.application.listings.command.PublishListingCommand;
-import com.example.webflux.application.listings.command.PublishListingCommandResult;
-import com.example.webflux.application.listings.command.RejectedListingCommand;
-import com.example.webflux.application.listings.command.RejectedListingCommandResult;
-import com.example.webflux.application.listings.command.SuspendListingCommand;
-import com.example.webflux.application.listings.command.SuspendListingCommandResult;
+import com.example.webflux.application.listings.command.GetListingByIdCommand;
+import com.example.webflux.application.listings.command.GetListingByIdCommandResult;
 
 import reactor.core.publisher.Mono;
 
@@ -21,15 +15,9 @@ public interface ListingUseCase {
 
     Mono<GetAllListingByCursorPaginationCommandResult> getAllListings(GetAllListingByCursorPaginationCommand cmd);
 
-    Mono<PublishListingCommandResult> publishListing(PublishListingCommand cmd);
+    Mono<GetListingByIdCommandResult> getListingById(GetListingByIdCommand cmd);
 
     Mono<CreateListingCommandResult> createListing(CreateListingCommand cmd);
 
-    Mono<InReviewStatusListingCommandResult> inReviewListing(InReviewStatusListingCommand cmd);
-
-    Mono<ApproveListingCommandResult> approveListing(ApproveListingCommand cmd);
-
-    Mono<SuspendListingCommandResult> suspendListing(SuspendListingCommand cmd);
-
-    Mono<RejectedListingCommandResult> rejectedListing(RejectedListingCommand cmd);
+    Mono<ChangeStatusListingCommandResult> changeStatusListing(ChangeStatusListingCommand cmd);
 }
