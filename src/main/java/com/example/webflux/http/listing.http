@@ -1,19 +1,42 @@
 ### crear un listing
 
 POST http://localhost:8080/api/listing HTTP/1.1
-Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJCUjdGT1JMSUZFLmNvbSIsInN1YiI6ImJyeWFuIiwiUk9MUyI6WyJST0xFX1VTRVIiXSwiZXhwIjoxNzczMTQ4MDk0LCJpYXQiOjE3NzI5MzIwOTQsImp0aSI6IjM5MzhkY2Q0LTVhZTctNGJlNy04YjMyLTJmMmU0MzViOTdiOCJ9.pu6YG_bXku7KviKvxHNoWjUX3MQobqeBw7Cxdj_ODCbx1yfHSD4TGjPh1ZkvgxSQXyPNibhmv6_K1duEWigML4BRZURFGSF_x3XSEFGR2BobaPPMjuJF7qq4j0WDw2yXHAonaVbHi0wCpnjIZrt6yYjI6xilcyNS3DVEgg0e0BWRhUOGgIlXBr1KTAREccZ8l6y6yz_uHTEsUHtEzKx5bxB7T9BF9JIKiPtSehwDuqUr1ZbCDQ5muSwTvGAD9PG0fN5g4i3lS1H5YQ_TDlhnj1SwXyTl2y2AZ0Qf6J1zTjgg6yO9Fgon60tjPdgqDI6HaIbkuC3ToFhQFxbPYvK2NA
-Cookie:refresh_token=bPJKT9qrHTRkYpCr8fEHZM_x6zWLsc56lt7bXtvNWVU; Path=/api/auth; HttpOnly; Expires=Tue, 07 Apr 2026 01:08:14 GMT;
+Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJicnlhbiIsIlJPTFMiOlsiUk9MRV9VU0VSIl0sImF1dGhTdGF0dXMiOiJBQ1RJVkUiLCJpc3MiOiJCUjdGT1JMSUZFLmNvbSIsImV4cCI6MTc3NTM1MDU3OSwidXNlcklkIjoiMTEyYTUxMjctZjEyMC00Yzc3LWJjMTgtY2I1Njc0NzdmYmRmIiwiaWF0IjoxNzc1MTM0NTc5LCJqdGkiOiIxNjUwMWI3NS1iMmJmLTQ4MTktYjRmNi0zYmM1ZGUxNTJiNjcifQ.y3APugF3_3UYpniaztfVlAFZK4Tn7VMiQROikhxeanTir8rPbHIDBM2etYQZVRP56yz8Cnp8xN6Ruo4XSQcEd_yaz3gHs5MYO84b3fcNpWSFCCXkB7lcYcD8sKR5ogGvAflRA7jrqLGjtvbZCC288m0qoTOkPz-nc_8lQNC3ZG6qwruqLS7TSz5e5v7JVYdZqgTu2boK9qitnljxqXxjeBIWmp_mC8Mj4YnkxzFzJktYtFrJJO3KIojVWpBp8dFCyIBiOIhgu2BDgpK3Sdqn1BrE517tohCyqKg675cVtN6Wjn46v0tUV0bmw9yYiYz8owmbjkeycQqI8l8s2eKbMA
+Cookie:refresh_token=NiIOu99DFtN0f1ySAhj3481VneYoIh91wjaO50QBYr0; Max-Age=2592000; Expires=Sat, 02 May 2026 12:56:20 GMT;  
 Content-Type: application/json
 
 
 {
-    "product": {
-        "name": "iphone 14 pro max",
-        "short_description": "iphone como nuevo",
-        "long_description": "motivo de viaje",
-        "model": "14 pro max",
-        "sku": "123"
-    },
-    "price": 0.0,
-    "currency": "USD"
+  "product": {
+    "name": "Google Pixel 8",
+    "shortDescription": "android puro",
+    "longDescription": "cámara increíble",
+    "model": "Pixel 8",
+    "sku": "GP8-007"
+  },
+  "price": 950,
+  "currency": "USD"
+}
+
+
+### obtener un listing por ID
+POST http://localhost:8080/api/listing/385076c6-d9d6-4553-b04f-35711991c0c8 HTTP/1.1
+Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJicnlhbiIsIlJPTFMiOlsiUk9MRV9VU0VSIl0sImF1dGhTdGF0dXMiOiJBQ1RJVkUiLCJpc3MiOiJCUjdGT1JMSUZFLmNvbSIsImV4cCI6MTc3NTcwMjY2NCwidXNlcklkIjoiMTEyYTUxMjctZjEyMC00Yzc3LWJjMTgtY2I1Njc0NzdmYmRmIiwiaWF0IjoxNzc1NDg2NjY0LCJqdGkiOiIxNjQyMzMxZi0xZDRlLTQ5YjctYWQ1MC03YmVlNzY0NjVjZTAifQ.m7C95Ffhy-u1VBRct4hZVFz18NS9jxDutnapQc8QGG0HyXrvpxT4z50OzOdSSu4D6FR0NygIIYKYhdCnqH0pikhjHvReAYOjYhfJzOvKCDsHPNT6O6t-spOdNR6ivBY-Rt9PR9ROc4Tw8qUBbKNsMZD_rpaqIZ8xsXSzjHUWo2a-ilrFS6WjYxe6m0y_2K2snplAbYv2toiPAShg8LsDfnP_RfrVZfk5UZp8OorFoZgrNP1uHNni4I4UCP0loG_txKdB1GLA8Gh7L4J0NzioUSZYKmHudNuVmjA4msKlh985MOyddqkYNDUaWitEh3iCN8XUTVlsrGjZ11u99245ZQ
+Cookie:refresh_token=PfxdzcuQVv0gvBdNQkGZx0b1gyQDKhwFzaqRTHTfaWI; Max-Age=2592000; Expires=Wed, 06 May 2026 14:44:24 GMT;
+Content-Type: application/json
+
+
+### Obtener todos los listings paginados
+GET http://localhost:8080/api/listing HTTP/1.1
+Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJicnlhbiIsIlJPTFMiOlsiUk9MRV9VU0VSIl0sImF1dGhTdGF0dXMiOiJBQ1RJVkUiLCJpc3MiOiJCUjdGT1JMSUZFLmNvbSIsImV4cCI6MTc3NTcxNDM4OCwidXNlcklkIjoiMTEyYTUxMjctZjEyMC00Yzc3LWJjMTgtY2I1Njc0NzdmYmRmIiwiaWF0IjoxNzc1NDk4Mzg4LCJqdGkiOiJlMTg3MzUxOC0yODhjLTRjMzQtODg0ZC0zN2Q3ZjJjZjFkOTIifQ.XmWc7qSHGbBKFeODYY9jss2xqAfNc0Ey1P10-J2YK7pVvmXNVVXZgIo5MgX3i6E4Njp1c78A2rhWvRC50V2wz2pejm0FYzWEHMbe5xRF_M0uOWE-KwFRKiwoG2qqyH4Hv4IFTYrWTzkwzDf1P2L-8LRTXzAgZCC2hAq1Bf_kO941BrYNv8A4UaarKe25hd55NBj2vmhJgBTm47KJaazewx0e4KG-nKxO_NZ6qm2LmTtFdggO-Y2pck3Mh1dlr4PmXDOxxul5oPw-WG7AIyrfOwolOOfMw_Qh3u-jbR9-R5mQRddDImJrkDrqwxHsofzKYa02GZXzFnDsjkSCeCtkEQ
+Cookie:refresh_token=LeMDBaKYMeTxk7nFNaugtqduJ4uRUIYHvNOBu97Jf6Y; Max-Age=2592000; Expires=Wed, 06 May 2026 17:59:48 GMT; 
+
+### cambiar el estado de un listing
+PATCH http://localhost:8080/api/listing/385076c6-d9d6-4553-b04f-35711991c0c8/status HTTP/1.1
+Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJicnlhbiIsIlJPTFMiOlsiUk9MRV9VU0VSIl0sImF1dGhTdGF0dXMiOiJBQ1RJVkUiLCJpc3MiOiJCUjdGT1JMSUZFLmNvbSIsImV4cCI6MTc3NTcxNDM4OCwidXNlcklkIjoiMTEyYTUxMjctZjEyMC00Yzc3LWJjMTgtY2I1Njc0NzdmYmRmIiwiaWF0IjoxNzc1NDk4Mzg4LCJqdGkiOiJlMTg3MzUxOC0yODhjLTRjMzQtODg0ZC0zN2Q3ZjJjZjFkOTIifQ.XmWc7qSHGbBKFeODYY9jss2xqAfNc0Ey1P10-J2YK7pVvmXNVVXZgIo5MgX3i6E4Njp1c78A2rhWvRC50V2wz2pejm0FYzWEHMbe5xRF_M0uOWE-KwFRKiwoG2qqyH4Hv4IFTYrWTzkwzDf1P2L-8LRTXzAgZCC2hAq1Bf_kO941BrYNv8A4UaarKe25hd55NBj2vmhJgBTm47KJaazewx0e4KG-nKxO_NZ6qm2LmTtFdggO-Y2pck3Mh1dlr4PmXDOxxul5oPw-WG7AIyrfOwolOOfMw_Qh3u-jbR9-R5mQRddDImJrkDrqwxHsofzKYa02GZXzFnDsjkSCeCtkEQ
+Cookie:refresh_token=LeMDBaKYMeTxk7nFNaugtqduJ4uRUIYHvNOBu97Jf6Y; Max-Age=2592000; Expires=Wed, 06 May 2026 17:59:48 GMT;
+Content-Type: application/json 
+
+{
+  "publicationStatus": "ACTIVE"
 }
