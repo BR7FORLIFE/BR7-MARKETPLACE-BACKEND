@@ -8,6 +8,7 @@ import org.springframework.web.server.ServerWebExchange;
 
 import com.example.webflux.application.listings.exceptions.InvalidCursorException;
 import com.example.webflux.application.listings.exceptions.ListingNotFoundException;
+import com.example.webflux.domain.listings.exceptions.InvalidChangeStateException;
 import com.example.webflux.domain.listings.exceptions.InvalidStateException;
 import com.example.webflux.infrastructure.zGlobalExceptionInfraestructure.helpers.ApiError;
 import com.example.webflux.infrastructure.zGlobalExceptionInfraestructure.helpers.StaticError;
@@ -35,5 +36,12 @@ public class ListingGlobalAdviceException {
             InvalidCursorException ex,
             ServerWebExchange exchange) {
         return StaticError.buildError(HttpStatus.CONFLICT, ex.getMessage(), exchange);
+    }
+
+    @ExceptionHandler(InvalidChangeStateException.class)
+    public ResponseEntity<ApiError> handleChangeStatus(
+            InvalidChangeStateException ex,
+            ServerWebExchange exchange) {
+        return StaticError.buildError(HttpStatus.NOT_ACCEPTABLE, ex.getMessage(), exchange);
     }
 }

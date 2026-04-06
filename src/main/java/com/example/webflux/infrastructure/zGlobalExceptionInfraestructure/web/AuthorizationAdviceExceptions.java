@@ -1,5 +1,7 @@
 package com.example.webflux.infrastructure.zGlobalExceptionInfraestructure.web;
 
+import java.nio.file.AccessDeniedException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,5 +29,12 @@ public class AuthorizationAdviceExceptions {
             RolNotFoundException ex,
             ServerWebExchange exchange) {
         return StaticError.buildError(HttpStatus.NOT_FOUND, ex.getMessage(), exchange);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiError> handleAccessDenied(
+            AccessDeniedException ex,
+            ServerWebExchange exchange) {
+        return StaticError.buildError(HttpStatus.NOT_ACCEPTABLE, ex.getMessage(), exchange);
     }
 }
