@@ -22,6 +22,7 @@ import com.example.webflux.application.listings.exceptions.ListingNotFoundExcept
 import com.example.webflux.application.listings.usecases.ListingUseCase;
 import com.example.webflux.application.products.commands.RegisterProductCommand;
 import com.example.webflux.application.products.usecases.ProductUseCases;
+import com.example.webflux.domain.Authorization.services.AuthorizationService;
 import com.example.webflux.domain.listings.models.ListingCursor;
 import com.example.webflux.domain.listings.models.ListingModelDomain;
 import com.example.webflux.domain.listings.models.ListingStatusReview;
@@ -83,7 +84,7 @@ public class ListingUseCaseImp implements ListingUseCase {
                                         .collectList()
                                         .flatMap(roles -> {
 
-                                                boolean canViewAll = ListingService.canViewAll(roles);
+                                                boolean canViewAll = AuthorizationService.canViewAll(roles);
 
                                                 Flux<ListingModelDomain> listings = canViewAll
                                                                 ? listingPort.getAllListings(createdAt, id,
@@ -157,7 +158,7 @@ public class ListingUseCaseImp implements ListingUseCase {
                                 .switchIfEmpty(Mono.error(new UserNotFoundException()))
                                 .collectList()
                                 .flatMap(role -> {
-                                        Boolean canView = ListingService.canViewAll(role);
+                                        Boolean canView = AuthorizationService.canViewAll(role);
 
                                         return listingPort.findByListingId(cmd.listingId())
                                                         .switchIfEmpty(Mono.error(new ListingNotFoundException()))

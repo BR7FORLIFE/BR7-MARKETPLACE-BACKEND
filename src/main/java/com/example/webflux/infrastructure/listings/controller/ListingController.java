@@ -96,6 +96,7 @@ public class ListingController {
                                                 .body(new ChangeStatusResponseDto(res.message(), res.updateAt())));
         }
 
+        //Las imagenes o recursos seran cargadas por el frontend
         @PostMapping(value = "/{listingId}/media", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
         public Mono<ResponseEntity<UploadMediaResponseDto>> uploadAssetsMedia(
                         @RequestPart("file") FilePart part, Authentication authentication,
