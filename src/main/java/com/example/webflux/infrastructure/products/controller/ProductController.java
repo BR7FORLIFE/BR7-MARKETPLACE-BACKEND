@@ -1,22 +1,23 @@
 package com.example.webflux.infrastructure.products.controller;
 
+import java.time.Instant;
 import java.util.UUID;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.webflux.application.products.commands.RegisterProductCommand;
-import com.example.webflux.application.products.dto.RegisterProductRequestDto;
-import com.example.webflux.application.products.dto.RegisterProductResponseDto;
+import com.example.webflux.application.products.commands.GetAllProductsCommand;
+import com.example.webflux.application.products.commands.GetProductByIdCommand;
+import com.example.webflux.application.products.dto.response.GetAllProductsResponseDto;
+import com.example.webflux.application.products.dto.response.GetProductByIdResponseDto;
 import com.example.webflux.application.products.usecases.ProductUseCases;
 import com.example.webflux.infrastructure.security.CustomUserDetails;
 
-import jakarta.validation.Valid;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -29,21 +30,36 @@ public class ProductController {
                 this.productUseCases = productUseCases;
         }
 
-        @PostMapping("/register")
-        public Mono<ResponseEntity<RegisterProductResponseDto>> registerProduct(
-                        @RequestBody @Valid RegisterProductRequestDto productDto, Authentication authentication) {
-                CustomUserDetails details = (CustomUserDetails) authentication.getDetails();
-
+        // metodo para obtener todos los productos del negocio (ADMINISTRADORES) y
+        // ademas si es un usuario
+        // obtener sus respectivos productos
+        @GetMapping
+        public Mono<ResponseEntity<GetAllProductsResponseDto>> getAllProducts(
+                        @RequestParam(required = false, defaultValue = "10") int limit,
+                        @RequestParam(required = false, defaultValue = "0") int offset,
+                        @RequestParam(required = false, defaultValue = "DESC") String orden,
+                        @RequestParam(required = false) Instant updateAt,
+                        Authentication authentication) {
+                CustomUserDetails details = (CustomUserDetails) authentication.getPrincipal();
                 UUID userId = details.getUserId();
 
-                RegisterProductCommand cmd = new RegisterProductCommand(userId, productDto.name(), productDto.sku(),
-                                productDto.shortDescription(), productDto.longDescription(), productDto.model());
+                GetAllProductsCommand cmd = new GetAllProductsCommand(userId, limit, offset, orden, updateAt);
 
-                return productUseCases.registerProduct(cmd)
-                                .map(result -> ResponseEntity.ok()
-                                                .body(new RegisterProductResponseDto(result.productId(), result.name(),
-                                                                "Product register succesfull!")))
-                                .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).build()));
+                return productUseCases.getAllProducts(cmd)
+                                .map(res -> ResponseEntity.ok().body(new GetAllProductsResponseDto(res.products(),
+                                                res.hasMore(), res.limit(), res.offset())));
+        }
 
+        @GetMapping("/{id}")
+        public Mono<ResponseEntity<GetProductByIdResponseDto>> getProductById(@PathVariable(name = "id") UUID productId,
+                        Authentication authentication) {
+
+                CustomUserDetails details = (CustomUserDetails) authentication.getPrincipal();
+                UUID userId = details.getUserId();
+
+                GetProductByIdCommand cmd = new GetProductByIdCommand(productId, userId);
+
+                return productUseCases.getProductById(cmd)
+                                .map(res -> ResponseEntity.ok().body(new GetProductByIdResponseDto(res.product())));
         }
 }

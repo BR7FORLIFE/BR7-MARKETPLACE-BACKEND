@@ -13,7 +13,9 @@ public class ProductMapper {
                 productEntity.getName(),
                 productEntity.getShortDescription(),
                 productEntity.getLongDescription(),
-                productEntity.getModel());
+                productEntity.getModel(),
+                productEntity.getCreateAt(),
+                productEntity.getUpdateAt());
     }
 
     public static ProductEntity toEntity(ProductModelDomain productModelDomain) {
@@ -25,6 +27,8 @@ public class ProductMapper {
         productEntity.setShortDescription(productModelDomain.getShortDescription());
         productEntity.setLongDescription(productModelDomain.getLongDescription());
         productEntity.setModel(productModelDomain.getModel());
+        productEntity.setCreateAt(productEntity.getCreateAt());
+        productEntity.setUpdateAt(productEntity.getUpdateAt());
 
         return productEntity;
     }

@@ -1,5 +1,6 @@
 package com.example.webflux.infrastructure.products.persistence;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
@@ -37,6 +38,12 @@ public class ProductEntity implements Persistable<UUID> {
 
     @Column("model")
     private String model;
+
+    @Column("create_at")
+    private Instant createAt;
+
+    @Column("update_at")
+    private Instant updateAt;
 
     @Override
     public boolean isNew() {
