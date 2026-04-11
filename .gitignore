@@ -41,7 +41,7 @@ python-user-registers/app
 .env.local
 .env.prod
 microservices-with-spring-cloud-and-webflux/01-WebFlux/.env
-env
+.env
 .env.sh
 
 ### config

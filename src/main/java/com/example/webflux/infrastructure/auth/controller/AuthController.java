@@ -154,4 +154,9 @@ public class AuthController {
         return Mono.just(ResponseEntity.ok(me));
     }
 
+    @GetMapping("/status")
+    public Mono<ResponseEntity<String>> status() {
+        return Mono.just(ResponseEntity.ok().body(""));
+    }
+
 }
