@@ -1,5 +1,6 @@
 package com.example.webflux.domain.products.models;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public final class ProductModelDomain {
@@ -10,6 +11,8 @@ public final class ProductModelDomain {
     private final String shortDescription;
     private final String longDescription;
     private final String model;
+    private final Instant createAt;
+    private final Instant updateAt;
 
     private ProductModelDomain(
             UUID productId,
@@ -18,7 +21,9 @@ public final class ProductModelDomain {
             String name,
             String shortDescription,
             String longDescription,
-            String model) {
+            String model,
+            Instant createAt,
+            Instant updateAt) {
         this.productId = productId;
         this.userId = userId;
         this.sku = sku;
@@ -26,6 +31,8 @@ public final class ProductModelDomain {
         this.shortDescription = shortDescription;
         this.longDescription = longDescription;
         this.model = model;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
     }
 
     public static ProductModelDomain createDraft(
@@ -42,7 +49,9 @@ public final class ProductModelDomain {
                 name,
                 shortDescription,
                 longDescription,
-                model);
+                model,
+                Instant.now(),
+                Instant.now());
     }
 
     public static ProductModelDomain createNew(
@@ -52,7 +61,9 @@ public final class ProductModelDomain {
             String name,
             String shortDescription,
             String longDescription,
-            String model) {
+            String model,
+            Instant createAt,
+            Instant updateAt) {
         return new ProductModelDomain(
                 id,
                 userId,
@@ -60,7 +71,9 @@ public final class ProductModelDomain {
                 name,
                 shortDescription,
                 longDescription,
-                model);
+                model,
+                createAt,
+                updateAt);
     }
 
     public ProductModelDomain withId(UUID id) {
@@ -71,7 +84,9 @@ public final class ProductModelDomain {
                 name,
                 shortDescription,
                 longDescription,
-                model);
+                model,
+                createAt,
+                updateAt);
     }
 
     public UUID getUserId() {
@@ -100,6 +115,14 @@ public final class ProductModelDomain {
 
     public String getModel() {
         return model;
+    }
+
+    public Instant getCreateAt() {
+        return createAt;
+    }
+
+    public Instant getUpdateAt() {
+        return updateAt;
     }
 
 }
