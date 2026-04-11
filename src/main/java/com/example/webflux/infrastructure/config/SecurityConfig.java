@@ -24,7 +24,8 @@ public class SecurityConfig {
 
     private final JwtService jwtService;
 
-    private final String[] PUBLIC_PATHS = { "/auth/**", "/email/**" };
+    private final String[] PUBLIC_PATHS = { "/auth/**", "/email/**", "/v3/api-docs/**", "/swagger-ui.html",
+            "/swagger-ui/**" };
 
     public SecurityConfig(JwtService jwtService) {
         this.jwtService = jwtService;

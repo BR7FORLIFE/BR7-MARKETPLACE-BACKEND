@@ -1,5 +1,6 @@
 package com.example.webflux.infrastructure.products.repository;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
@@ -10,6 +11,7 @@ import com.example.webflux.infrastructure.products.mapper.ProductMapper;
 import com.example.webflux.infrastructure.products.persistence.ProductEntity;
 import com.example.webflux.infrastructure.products.repository.postgres.R2dbcPostgresProductRepository;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
@@ -19,6 +21,32 @@ public class R2dbcProductRepositoryAdapter implements ProductDomainRepositoryPor
 
     public R2dbcProductRepositoryAdapter(R2dbcPostgresProductRepository r2dbcPostgresProductRepository) {
         this.productRepository = r2dbcPostgresProductRepository;
+    }
+
+    @Override
+    public Flux<ProductModelDomain> findAll(Instant updateAt, int limit, int offset) {
+        if (updateAt == null) {
+            return productRepository.findAllWithoutDate(limit, offset)
+                    .map(ProductMapper::toDomain);
+        }
+        return productRepository.findAllWithDate(updateAt, limit, offset)
+                .map(ProductMapper::toDomain);
+    }
+
+    @Override
+    public Flux<ProductModelDomain> findAllProductsByUserId(UUID userId, int limit, int offset, String order) {
+        if (order.equals("ASC")) {
+            return productRepository.findAllProductsByUserIdAsc(userId, limit, offset)
+                    .map(ProductMapper::toDomain);
+        }
+        return productRepository.findAllProductsByUserIdDesc(userId, limit, offset)
+                .map(ProductMapper::toDomain);
+    }
+
+    @Override
+    public Mono<ProductModelDomain> findByProductIdAndUserId(UUID productId, UUID userId) {
+        return productRepository.findByIdAndUserId(productId, userId)
+                .map(ProductMapper::toDomain);
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ServerWebExchange;
 
+import com.example.webflux.application.products.exceptions.ProductNotFoundException;
 import com.example.webflux.application.products.exceptions.RegisterProductException;
 import com.example.webflux.infrastructure.zGlobalExceptionInfraestructure.helpers.ApiError;
 import com.example.webflux.infrastructure.zGlobalExceptionInfraestructure.helpers.StaticError;
@@ -19,5 +20,13 @@ public class ProductGlobalAdviceExceptions {
             RegisterProductException ex,
             ServerWebExchange exchange) {
         return StaticError.buildError(HttpStatus.NOT_ACCEPTABLE, ex.getMessage(), exchange);
+    }
+
+    // excepcion cuando no se encuentra el producto
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ApiError> handleProductNotFound(
+            ProductNotFoundException ex,
+            ServerWebExchange exchange) {
+        return StaticError.buildError(HttpStatus.NOT_FOUND, ex.getMessage(), exchange);
     }
 }
