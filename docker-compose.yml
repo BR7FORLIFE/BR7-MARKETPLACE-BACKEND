@@ -17,7 +17,7 @@ services:
 ### base de datos
   postgres:
     image: postgres:17
-    container_name: marketplace-db
+    container_name: marketplace-database
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USERNAME}
