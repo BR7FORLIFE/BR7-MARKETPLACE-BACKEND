@@ -1,6 +1,8 @@
 package com.example.webflux.infrastructure.security;
 
+import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -26,7 +28,6 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Mono<Authentication> authenticate(Authentication authentication) {
         String token = (String) authentication.getCredentials();
         return jwtService.validateAccessToken(token)
@@ -42,17 +43,22 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
                         return Mono.<Authentication>error(new BadCredentialsException("Invalid JWT claim: userId"));
                     }
 
-                    List<String> rols = (List<String>) claims.getClaim("ROLS");
-                    List<GrantedAuthority> authorities = rols == null
-                            ? List.of()
-                            : rols.stream()
-                                    .map(role -> new SimpleGrantedAuthority(role.toString()))
-                                    .collect(Collectors.toList());
+                    List<String> rols;
+                    try {
+                        rols = Optional.ofNullable(claims.getStringListClaim("ROLS"))
+                                .orElse(List.of());
+                    } catch (ParseException e) {
+                        return Mono.error(new BadCredentialsException("Invalid roles in JWT", e));
+                    }
+
+                    List<GrantedAuthority> authorities = rols.stream()
+                            .map(role -> new SimpleGrantedAuthority(role.toString()))
+                            .collect(Collectors.toList());
 
                     CustomUserDetails userDetails = new CustomUserDetails(
                             UserModelDomain.createNew(UUID.fromString(userId), username, authStatus, null, null),
                             authorities);
-                        
+
                     Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
                     return Mono.just(auth);
                 })
