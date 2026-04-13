@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.webflux.application.Authorization.ports.RolUserRepositoryPort;
-import com.example.webflux.application.auth.exceptions.UserNotFoundException;
 import com.example.webflux.application.products.commands.GetAllProductsCommand;
 import com.example.webflux.application.products.commands.GetAllProductsCommandResult;
 import com.example.webflux.application.products.commands.GetProductByIdCommand;

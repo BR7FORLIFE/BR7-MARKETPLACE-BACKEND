@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.example.webflux.application.Authorization.exceptions.AccessDeniedException;
@@ -175,6 +176,7 @@ public class ListingUseCaseImp implements ListingUseCase {
                                 });
         }
 
+        @PreAuthorize("hasRole('ADMIN')")
         @Override
         public Mono<ChangeStatusListingCommandResult> changeStatusListing(ChangeStatusListingCommand cmd) {
                 return listingPort.findByListingId(cmd.listingId())

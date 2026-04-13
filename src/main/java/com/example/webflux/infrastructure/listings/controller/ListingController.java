@@ -2,6 +2,7 @@ package com.example.webflux.infrastructure.listings.controller;
 
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
@@ -20,10 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.webflux.application.AssetsMedia.dto.response.UploadMediaResponseDto;
 import com.example.webflux.application.AssetsMedia.orchestator.AssetsMediaUseCaseImp;
 import com.example.webflux.application.listings.command.ChangeStatusListingCommand;
+import com.example.webflux.application.listings.command.CreateListingCommand;
 import com.example.webflux.application.listings.command.GetAllListingByCursorPaginationCommand;
 import com.example.webflux.application.listings.command.GetListingByIdCommand;
 import com.example.webflux.application.listings.dto.request.ChangeStatusRequestDto;
+import com.example.webflux.application.listings.dto.request.CreateListingRequestDto;
 import com.example.webflux.application.listings.dto.response.ChangeStatusResponseDto;
+import com.example.webflux.application.listings.dto.response.CreateListingResponseDto;
 import com.example.webflux.application.listings.dto.response.GetAllListingResponseDto;
 import com.example.webflux.application.listings.dto.response.GetListingByIdResponseDto;
 import com.example.webflux.application.listings.usecases.ListingUseCase;
@@ -47,6 +51,22 @@ public class ListingController {
                 this.listingUseCase = listingUseCase;
                 this.fileParserConverter = converter;
                 this.assetsMediaUseCaseImp = assetsMediaUseCaseImp;
+        }
+
+        // crear los listings
+        @PostMapping
+        public Mono<ResponseEntity<CreateListingResponseDto>> createListing(
+                        @RequestBody CreateListingRequestDto dto, Authentication authentication) {
+
+                CustomUserDetails details = (CustomUserDetails) authentication.getPrincipal();
+                UUID userId = details.getUserId();
+
+                CreateListingCommand cmd = new CreateListingCommand(userId, dto.product(), dto.price(), dto.currency());
+
+                return listingUseCase.createListing(cmd)
+                                .map(res -> ResponseEntity.status(HttpStatus.CREATED).body(new CreateListingResponseDto(
+                                                res.listingId(), res.status(), res.message())));
+
         }
 
         // obtener todos los listings paginados y ordernados!
@@ -96,7 +116,7 @@ public class ListingController {
                                                 .body(new ChangeStatusResponseDto(res.message(), res.updateAt())));
         }
 
-        //Las imagenes o recursos seran cargadas por el frontend
+        // Las imagenes o recursos seran cargadas por el frontend
         @PostMapping(value = "/{listingId}/media", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
         public Mono<ResponseEntity<UploadMediaResponseDto>> uploadAssetsMedia(
                         @RequestPart("file") FilePart part, Authentication authentication,
