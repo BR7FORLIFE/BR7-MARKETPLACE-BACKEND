@@ -47,6 +47,11 @@ microservices-with-spring-cloud-and-webflux/01-WebFlux/.env
 ### config
 src/main/resources/application-prod.yml
 
-##logger
+##logger and http
 logger.log
 logger.*
+*.log
+
+/http
+./http
+http/
