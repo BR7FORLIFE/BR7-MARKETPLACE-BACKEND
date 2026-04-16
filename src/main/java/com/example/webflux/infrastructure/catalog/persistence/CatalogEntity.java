@@ -10,7 +10,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import lombok.Data;
 
-@Table
+@Table("catalogs")
 @Data
 public class CatalogEntity implements Persistable<UUID> {
 
