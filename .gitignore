@@ -52,6 +52,3 @@ logger.log
 logger.*
 *.log
 
-/http
-./http
-http/

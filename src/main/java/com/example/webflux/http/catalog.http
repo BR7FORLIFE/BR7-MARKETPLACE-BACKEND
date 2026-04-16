@@ -1,0 +1,13 @@
+### create catalog
+POST http://localhost:8080/api/catalog HTTP/1.1
+Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJicnlhbiIsIlJPTFMiOlsiUk9MRV9VU0VSIl0sImF1dGhTdGF0dXMiOiJBQ1RJVkUiLCJpc3MiOiJCUjdGT1JMSUZFLmNvbSIsImV4cCI6MTc3NjQ5MzkyOSwidXNlcklkIjoiZDYwMTA1YWUtYjIyMi00NmIxLWI1MzEtYjM3MmJiZGVlYjg0IiwiaWF0IjoxNzc2Mjc3OTI5LCJqdGkiOiJlOWVlNDFkMi03MjI3LTRjMzEtODg1Ny00YjI4ZDI1MzA3ZjgifQ.OLHJwW_Rpabk6dSJ2AT0Zd3QciAlXx78lq8NvV2rqus1FKWwdTH_jHYVnAlvM-EXO0f7rcNl99KCwojj5TII3qDrY_2nwCyE8DkJ1uM5_LY2vTThdojXEuM7NhgPIRM0oGJU6b0VZMK358tiLSkz6m6YJzyL8K9rA5BfY9bqs62fEcGpMyVvXhTonfeBBJGU2gWCsyMqztBtTYtT95tTTjK8c9Jv1zcc2vUaeOEFOojWhyd5M1-1QU1Wjj7oeYkBv6QZCJONxEnbST7H0BhW6u2x91ja6k8DMenCnA25A2mRWaV2Sm27hFJ8hxUk1f4ojAy7xZ143XjKqgRX7PiYiQ
+Cookie:refresh_token=_7dTpL5-QUidIjMrpeR3qRlsJA-cLxsKxyKyEMow6lY; Max-Age=2592000; Expires=Fri, 15 May 2026 18:32:09 GMT;  
+Content-Type: application/json
+
+{
+    "slug": "tech",
+    "nameCatalog": "Tecnologia",
+    "typeCatalog": "PRODUCT",
+    "status": "ACTIVE",
+    "visible": true
+}
