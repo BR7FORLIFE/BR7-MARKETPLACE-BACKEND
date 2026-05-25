@@ -14,6 +14,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
+import org.springframework.web.cors.CorsConfiguration;
 
 import com.example.webflux.infrastructure.security.JwtReactiveAuthenticationManager;
 import com.example.webflux.infrastructure.security.jwt.JwtService;
@@ -37,6 +38,14 @@ public class SecurityConfig {
             throws Exception {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .cors(t -> t.configurationSource(request -> {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowCredentials(true);
+                    config.addAllowedOrigin("http://localhost:5173");
+                    config.addAllowedHeader("*");
+                    config.addAllowedMethod("*");
+                    return config;
+                }))
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint((exchange, ex) -> {
                             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
