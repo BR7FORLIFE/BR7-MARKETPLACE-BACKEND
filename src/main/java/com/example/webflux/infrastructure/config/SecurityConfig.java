@@ -3,6 +3,8 @@ package com.example.webflux.infrastructure.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.r2dbc.connection.R2dbcTransactionManager;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -14,10 +16,13 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
+import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.web.cors.CorsConfiguration;
 
 import com.example.webflux.infrastructure.security.JwtReactiveAuthenticationManager;
 import com.example.webflux.infrastructure.security.jwt.JwtService;
+
+import io.r2dbc.spi.ConnectionFactory;
 
 @Configuration
 @EnableReactiveMethodSecurity
@@ -74,6 +79,13 @@ public class SecurityConfig {
             ReactiveUserDetailsService reactiveUserDetailsService,
             PasswordEncoder passwordEncoder) throws Exception {
         return new JwtReactiveAuthenticationManager(jwtService); // -> implementacion de ReactiveUserDetailsService
+    }
+
+    // creamos un bean para las transacciones ACID en las operaciones criticas de
+    // base de datos
+    @Bean
+    public ReactiveTransactionManager reactiveTransactionManager(@NonNull ConnectionFactory connectionFactory) {
+        return new R2dbcTransactionManager(connectionFactory);
     }
 
     @Bean

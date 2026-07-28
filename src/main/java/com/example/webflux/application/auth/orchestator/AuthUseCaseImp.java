@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.webflux.application.Authorization.command.AssigmentUserRolCommand;
 import com.example.webflux.application.Authorization.usecases.AuthorizationRolUseCase;
@@ -59,6 +60,7 @@ public class AuthUseCaseImp implements AuthUseCase {
                 .switchIfEmpty(Mono.error(new VerifiedUserException()));
     }
 
+    @Transactional
     @Override
     public Mono<RegisterUserCommandResult> executeRegister(RegisterUserCommand cmd) {
 
