@@ -1,0 +1,526 @@
+{
+	"info": {
+		"_postman_id": "70a8f069-a0eb-4bb4-a472-dbb8c7318a92",
+		"name": "BR7MARKETPLACE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42659813"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Products",
+					"item": [
+						{
+							"name": "Get All Products",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{default_path}}/products",
+									"host": [
+										"{{default_path}}"
+									],
+									"path": [
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Product By ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{default_path}}/products/29ad5034-70a3-4b0a-a503-83b3c03cca8e",
+									"host": [
+										"{{default_path}}"
+									],
+									"path": [
+										"products",
+										"29ad5034-70a3-4b0a-a503-83b3c03cca8e"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"bryan\",\n    \"password\": \"bryan123\",\n    \"email\": \"diazpachecobrayan@gmail.com\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{default_path}}/auth/register",
+							"host": [
+								"{{default_path}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \n    \"password\": \"bryan123\",\n    \"email\": \"diazpachecobrayan@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{default_path}}/auth/login",
+							"host": [
+								"{{default_path}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify-email",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{default_path}}/email/verify?token=",
+							"host": [
+								"{{default_path}}"
+							],
+							"path": [
+								"email",
+								"verify"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "rotate-refresh_token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{default_path}}/auth/refresh/rotate",
+							"host": [
+								"{{default_path}}"
+							],
+							"path": [
+								"auth",
+								"refresh",
+								"rotate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{default_path}}/auth/logout",
+							"host": [
+								"{{default_path}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "me",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{default_path}}/auth/me",
+							"host": [
+								"{{default_path}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtain-accesstoken",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{default_path}}/auth/refresh",
+							"host": [
+								"{{default_path}}"
+							],
+							"path": [
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication del usuario, (register, login, refresh, email verification)"
+		},
+		{
+			"name": "Listings",
+			"item": [
+				{
+					"name": "ADMIN-ROLE",
+					"item": [
+						{
+							"name": "Approve",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"listingId\": \"cb5bf8cb-bf93-4b6e-b9b4-aaa16c758919\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{default_path}}/listing/approve",
+									"host": [
+										"{{default_path}}"
+									],
+									"path": [
+										"listing",
+										"approve"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Status To Listing",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"review\": \"IN_REVIEW\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{default_path}}/listing/cff6f799-1e5c-4ec0-b701-73b5e130fa85/status",
+									"host": [
+										"{{default_path}}"
+									],
+									"path": [
+										"listing",
+										"cff6f799-1e5c-4ec0-b701-73b5e130fa85",
+										"status"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create Listing",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product\": {\n        \"name\": \"iphone 14 pro max\",\n        \"shortDescription\": \"iphone como nuevo\",\n        \"longDescription\": \"motivo de viaje\",\n        \"model\": \"14 pro max\",\n        \"sku\": \"123\"\n    },\n    \"price\": 2000,\n    \"currency\": \"USD\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{default_path}}/listing",
+							"host": [
+								"{{default_path}}"
+							],
+							"path": [
+								"listing"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Listings",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{default_path}}/listing",
+							"host": [
+								"{{default_path}}"
+							],
+							"path": [
+								"listing"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Listing By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{default_path}}/listing/cff6f799-1e5c-4ec0-b701-73b5e130fa85",
+							"host": [
+								"{{default_path}}"
+							],
+							"path": [
+								"listing",
+								"cff6f799-1e5c-4ec0-b701-73b5e130fa85"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Conjunto de endpoint donde nosotros enviamos una solicitud de publicación de productos"
+		},
+		{
+			"name": "Status",
+			"item": [
+				{
+					"name": "Service Status Test",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{default_path}}/status",
+							"host": [
+								"{{default_path}}"
+							],
+							"path": [
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Catalog",
+			"item": [
+				{
+					"name": "Create Catalog",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"slug\": \"PT-001\",\n    \"nameCatalog\": \"Productos Tecnologicos\",\n    \"typeCatalog\": \"Tecnologia\",\n    \"status\": \"ACTIVE\",\n    \"visible\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{default_path}}/catalog",
+							"host": [
+								"{{default_path}}"
+							],
+							"path": [
+								"catalog"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					"let response;",
+					"",
+					"try {",
+					"    response = pm.response.json();",
+					"",
+					"    if (response.access_token) {",
+					"        pm.environment.set(\"access_token\", response.access_token);",
+					"    } else {",
+					"        console.warn(\"No se encontró access_token en la respuesta\");",
+					"    }",
+					"",
+					"} catch (e) {",
+					"    console.error(\"La respuesta no es JSON\");",
+					"}",
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "default_path",
+			"value": ""
+		},
+		{
+			"key": "access_token",
+			"value": ""
+		}
+	]
+}
