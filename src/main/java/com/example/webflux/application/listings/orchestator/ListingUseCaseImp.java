@@ -176,7 +176,7 @@ public class ListingUseCaseImp implements ListingUseCase {
                                 });
         }
 
-        @PreAuthorize("hasRole('ADMIN')")
+
         @Override
         public Mono<ChangeStatusListingCommandResult> changeStatusListing(ChangeStatusListingCommand cmd) {
                 return listingPort.findByListingId(cmd.listingId())
