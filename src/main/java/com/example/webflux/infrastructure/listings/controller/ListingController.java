@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -106,6 +106,7 @@ public class ListingController {
                                                 .body(new GetListingByIdResponseDto(result.listing(), result.error())));
         }
 
+        @PreAuthorize("hasRole('ADMIN')")
         @PatchMapping("/{id}/status")
         public Mono<ResponseEntity<ChangeStatusResponseDto>> changeStatusListing(
                         @PathVariable(name = "id") UUID listingId, @RequestBody ChangeStatusRequestDto dto) {

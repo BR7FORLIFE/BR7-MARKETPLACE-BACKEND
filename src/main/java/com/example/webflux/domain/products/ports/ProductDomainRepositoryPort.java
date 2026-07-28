@@ -1,6 +1,7 @@
 package com.example.webflux.domain.products.ports;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 import com.example.webflux.domain.products.models.ProductModelDomain;
@@ -25,4 +26,6 @@ public interface ProductDomainRepositoryPort {
     Mono<Boolean> existById(UUID id);
 
     Mono<Boolean> existsBySku(String sku);
+
+    Mono<List<ProductModelDomain>> findByIds(List<UUID> productsIds);
 }

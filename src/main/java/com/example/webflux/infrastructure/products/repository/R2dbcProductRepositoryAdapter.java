@@ -1,6 +1,7 @@
 package com.example.webflux.infrastructure.products.repository;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,13 @@ public class R2dbcProductRepositoryAdapter implements ProductDomainRepositoryPor
 
     public R2dbcProductRepositoryAdapter(R2dbcPostgresProductRepository r2dbcPostgresProductRepository) {
         this.productRepository = r2dbcPostgresProductRepository;
+    }
+
+    @Override
+    public Mono<List<ProductModelDomain>> findByIds(List<UUID> productsIds) {
+        return productRepository.findAllById(productsIds)
+                .map(ProductMapper::toDomain)
+                .collectList();
     }
 
     @Override
